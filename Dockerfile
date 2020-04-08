@@ -3,13 +3,15 @@ FROM ubuntu:19.04
 # Update and upgrade system
 RUN apt-get update && apt-get -y upgrade
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Required Packages for the Host Development System
 # http://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#required-packages-for-the-host-development-system
-RUN sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib \
+RUN apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
      build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
      xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev \
      pylint3 xterm && \
-     sudo apt-get install make xsltproc docbook-utils fop dblatex xmlto
+     apt-get install -y make xsltproc docbook-utils fop dblatex xmlto
 
 # Additional host packages
 RUN apt-get install -y curl dosfstools mtools parted syslinux tree

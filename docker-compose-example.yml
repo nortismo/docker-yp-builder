@@ -1,0 +1,9 @@
+version: '3'
+services:
+  ubuntu:
+    image: nortismo/docker-yocto-project-builder
+    volumes:
+    - /home/build:/home/build
+    stdin_open: true
+    tty: true
+    container_name: 'yocto-container'
