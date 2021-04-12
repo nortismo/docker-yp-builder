@@ -1,7 +1,10 @@
 FROM ubuntu:19.04
 
+# Set sources to old releases (19.04 is not supported anymore)
+RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
+
 # Update and upgrade system
-RUN apt-get update && apt-get -y upgrade
+RUN apt-get update -y && apt-get upgrade -y
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -21,8 +24,8 @@ RUN curl http://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/
 RUN chmod a+x /usr/local/bin/repo
 
 # Create a non-root user that will perform the actual build
-RUN groupadd --gid 1002 faes
-RUN id build 2>/dev/null || useradd --uid 1002 --gid 1002 --create-home build 
+RUN groupadd --gid 1000 build
+RUN id build 2>/dev/null || useradd --uid 1000 --gid 1000 --create-home build 
 RUN apt-get install -y sudo
 RUN echo "build ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers
 
@@ -42,5 +45,7 @@ ENV LANGUAGE en_US.UTF-8
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 USER build
+ENV HOME /home/build
 WORKDIR /home/build
-CMD "/bin/bash"
+
+cmd ["/bin/bash"]
